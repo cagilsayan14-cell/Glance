@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-tr="Asistan · GLANCE">Assistant · GLANCE</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/glance.css">
+</head>
+<body data-page="asistan">
+<main id="main" tabindex="-1">
+  <div class="page-head">
+    <div><h1 data-tr="Asistan">Assistant</h1><p class="muted" data-tr="Planını seç, ajan veriye bakıp önersin. Emir senin onayınla gider.">Pick your plan, let the agent read the market and propose. Orders go out only with your approval.</p></div>
+    <span class="badge badge-ok" data-tr="Yarı otomatik">Semi-automatic</span>
+  </div>
+  <div class="asst-grid">
+    <div class="grid">
+      <section class="card">
+        <div class="card-head"><h2 data-tr="Planın">Your plan</h2><span class="faint" data-tr="yazı yok, sadece seç">no typing, just pick</span></div>
+        <div class="picker" id="picker"></div>
+      </section>
+      <section class="card">
+        <div class="card-head"><h2 data-tr="GLANCE ajanı">GLANCE agent</h2><span class="badge badge-muted" id="agent-state"></span></div>
+        <div class="convo" id="convo" aria-live="polite"></div>
+        <div class="quick" id="quick" style="margin:10px 0"></div>
+        <form class="composer" id="composer"><input id="msg" placeholder="e.g. plan a trade on SOL" data-tr-ph="Örn. SOL için plan çıkar" autocomplete="off" aria-label="Message"><button class="btn btn-primary" type="submit" data-tr="Gönder">Send</button></form>
+      </section>
+    </div>
+    <div class="grid">
+      <section class="card">
+        <div class="chart-top">
+          <h2><span id="c-sym">ETH/USDT</span> <small class="mono" id="c-px"></small></h2>
+          <div class="tf" id="tf"></div>
+        </div>
+        <div class="chart-wrap" id="chart"></div>
+      </section>
+      <section id="proposal-slot"></section>
+      <section class="card">
+        <div class="card-head"><h2 data-tr="Emirler">Orders</h2><span class="faint" id="q-count"></span></div>
+        <div class="queue" id="queue"></div>
+      </section>
+    </div>
+    <div class="grid">
+      <section class="card">
+        <div class="tabs" role="tablist" id="rtabs">
+          <button role="tab" aria-selected="true" data-t="ls">Long/Short</button>
+          <button role="tab" aria-selected="false" data-t="liq" data-tr="Likidasyon">Liquidations</button>
+          <button role="tab" aria-selected="false" data-t="fund">Funding</button>
+        </div>
+        <div id="rbox" style="margin-top:12px"></div>
+      </section>
+      <section class="card">
+        <div class="card-head"><h2 data-tr="Risk kapısı">Risk gate</h2></div>
+        <p class="muted" style="margin:0;font-size:.88rem" data-tr="Ajanın önerisi emre dönüşmeden önce kod şunları kontrol eder: stop var mı, R:R planın altında mı, risk sınırı aşılıyor mu, açık pozisyon sayısı dolu mu. Biri bile tutmazsa emir gitmez.">Before a proposal becomes an order, code checks: is there a stop, is R:R below your plan, is the risk limit exceeded, are open positions full. If any check fails, no order is sent.</p>
+      </section>
+    </div>
+  </div>
+</main>
+<script src="vendor/lightweight-charts.standalone.production.js"></script>
+<script src="js/common.js"></script>
+<script src="js/log.js"></script>
+<script src="js/asistan.js"></script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-tr="Algo trade · GLANCE">Algo trading · GLANCE</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/glance.css">
+</head>
+<body data-page="algo">
+<main id="main" tabindex="-1">
+  <div id="setup">
+    <div class="page-head">
+      <div><h1 data-tr="Algo trade">Algo trading</h1><p class="muted" data-tr="Bir risk profili seç ya da kendi planını kur. Başlat'a bastığında sistem kurallara göre işlem açar.">Pick a risk profile or build your own plan. Press Start and the system trades by the rules.</p></div>
+      <span class="badge badge-ok" data-tr="Tam otomatik">Fully automatic</span>
+    </div>
+    <div class="prof-grid" id="profiles"></div>
+    <section class="card" id="manual" hidden style="margin-top:14px">
+      <div class="card-head"><h2 data-tr="Manuel plan">Manual plan</h2><span class="faint" data-tr="pariteleri ve kuralları sen seç">you pick the pairs and rules</span></div>
+      <div class="picker" id="picker"></div>
+    </section>
+    <div class="start-bar" style="margin-top:14px">
+      <div class="sum" id="sum"></div>
+      <button class="btn btn-primary btn-lg" id="start" data-tr="▶ Başlat">▶ Start</button>
+    </div>
+  </div>
+
+  <div id="run" hidden>
+    <div class="run-head">
+      <div class="live"><i></i><span id="run-title"></span></div>
+      <div style="gap:18px;display:flex;flex-wrap:wrap">
+        <span class="stat"><span data-tr="Bakiye">Balance</span> <b class="mono" id="k-bal"></b></span>
+        <span class="stat"><span data-tr="Açık PnL">Open PnL</span> <b class="mono" id="k-pnl"></b></span>
+        <span class="stat"><span data-tr="Pozisyon">Positions</span> <b class="mono" id="k-pos"></b></span>
+        <span class="stat"><span data-tr="Karar">Decisions</span> <b class="mono" id="k-dec"></b></span>
+      </div>
+      <button class="btn btn-coral" id="stop" data-tr="■ Durdur">■ Stop</button>
+    </div>
+    <div class="term-grid">
+      <section class="card term-watch">
+        <div class="card-head"><h3 data-tr="İzleme listesi">Watchlist</h3><span class="faint" id="w-n"></span></div>
+        <div class="table-wrap"><table class="dense"><thead><tr><th data-tr="Parite">Pair</th><th class="num" data-tr="Fiyat">Price</th><th class="num" data-tr="24s">24h</th></tr></thead><tbody id="watch"></tbody></table></div>
+      </section>
+      <div class="term-center">
+        <section class="card">
+          <div class="chart-top"><h3 style="margin:0"><span id="c-sym"></span> <small class="mono" id="c-px"></small></h3><div class="tf" id="tf"></div></div>
+          <div class="algo-chart" id="chart"></div>
+        </section>
+        <section class="card term-bottom">
+          <div class="tabs" role="tablist" id="btabs"><button role="tab" aria-selected="true" data-t="pos" data-tr="Pozisyonlar">Positions</button><button role="tab" aria-selected="false" data-t="feed" data-tr="Karar akışı">Decision feed</button></div>
+          <div class="tb-box" id="bbox"></div>
+        </section>
+      </div>
+      <div class="term-side">
+        <section class="card term-rtabs">
+          <div class="tabs" role="tablist" id="rtabs"><button role="tab" aria-selected="true" data-t="risk">Risk</button><button role="tab" aria-selected="false" data-t="liq" data-tr="Likidasyon">Liquidations</button><button role="tab" aria-selected="false" data-t="ls">L/S</button></div>
+          <div class="rt-box" id="rbox"></div>
+        </section>
+      </div>
+    </div>
+  </div>
+</main>
+<script src="vendor/lightweight-charts.standalone.production.js"></script>
+<script src="js/common.js"></script>
+<script src="js/log.js"></script>
+<script src="js/algo.js"></script>
+</body>
+</html>

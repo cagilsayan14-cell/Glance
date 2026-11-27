@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-tr="Piyasa verisi · GLANCE">Market data · GLANCE</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/glance.css">
+</head>
+<body data-page="piyasa">
+<main id="main" tabindex="-1">
+  <div class="page-head">
+    <div><h1 data-tr="Piyasa verisi">Market data</h1><p class="muted" data-tr="Ajanın baktığı veriler: long/short oranı, likidasyon ısı haritası, funding.">What the agent reads: long/short ratio, liquidation heatmap, funding.</p></div>
+  </div>
+  <div class="grid grid-2">
+    <section class="card">
+      <div class="card-head"><h2 id="h-sym"></h2><div class="tf" id="pairs"></div></div>
+      <div class="heat big" id="heat"></div>
+      <div class="heat-legend"><span data-tr="az">low</span><i></i><span data-tr="çok">high</span></div>
+      <p class="faint" style="font-size:.8rem;margin:6px 0 0" id="heat-note"></p>
+      <div class="mini-stats" style="margin-top:12px" id="hstats"></div>
+    </section>
+    <section class="card">
+      <div class="filter-row">
+        <h2 style="margin:0">Long / Short</h2>
+        <div class="segment" id="sort"><button type="button" data-s="v" aria-pressed="true" data-tr="Hacim">Volume</button><button type="button" data-s="l" aria-pressed="false" data-tr="En çok long">Most long</button><button type="button" data-s="sh" aria-pressed="false" data-tr="En çok short">Most short</button><button type="button" data-s="f" aria-pressed="false">Funding</button></div>
+      </div>
+      <div class="table-wrap" style="margin-top:12px"><table class="dense ls-table"><thead><tr><th data-tr="Parite">Pair</th><th class="num" data-tr="Fiyat">Price</th><th class="num" data-tr="24s">24h</th><th>Long / Short</th><th class="num">Funding</th><th class="num" data-tr="Hacim">Volume</th></tr></thead><tbody id="ls"></tbody></table></div>
+      <p class="faint" style="font-size:.8rem;margin:8px 0 0" id="src"></p>
+    </section>
+  </div>
+</main>
+<script src="js/common.js"></script>
+<script>
+(function () {
+  const { fmt, T } = G, $ = (s) => document.querySelector(s);
+  let sym = "BTC", sort = "v";
+  const drawHeat = () => {
+    $("#h-sym").textContent = T(`${sym} likidasyon ısı haritası`, `${sym} liquidation heatmap`);
+    $("#heat-note").textContent = G.heatNote();
+    $("#pairs").innerHTML = ["BTC", "ETH", "SOL", "XRP", "DOGE"].map((s) => `<button type="button" class="chip" data-p="${s}" aria-pressed="${s === sym}">${s}</button>`).join("");
+    $("#pairs").querySelectorAll("[data-p]").forEach((b) => (b.onclick = () => { sym = b.dataset.p; drawHeat(); drawLs(); }));
+    const h = G.heatmap($("#heat"), sym), c = G.coin(sym);
+    $("#hstats").innerHTML = `<div><span>${T("Üstteki küme (short likidasyonu)", "Upper cluster (short liquidations)")}</span><b>${fmt.price(h.shortCluster)}</b></div><div><span>${T("Alttaki küme (long likidasyonu)", "Lower cluster (long liquidations)")}</span><b>${fmt.price(h.longCluster)}</b></div><div><span>Long / short</span><b>${fmt.pr(c.l)} / ${fmt.pr(100 - c.l)}</b></div><div><span>Funding (8h)</span><b class="${G.cls(-c.f)}">${fmt.pct(c.f, 3)}</b></div>`;
+  };
+  const drawLs = () => {
+    const key = { v: (a, b) => b.v - a.v, l: (a, b) => b.l - a.l, sh: (a, b) => a.l - b.l, f: (a, b) => b.f - a.f }[sort];
+    $("#ls").innerHTML = [...G.COINS].sort(key).map((c) => `<tr data-s="${c.s}" class="${c.s === sym ? "sel" : ""}"><td><b>${c.s}</b></td><td class="num">${fmt.price(c.p)}</td><td class="num ${G.cls(c.c)}">${fmt.pct(c.c)}</td><td>${G.lsBar(c)}</td><td class="num ${G.cls(-c.f)}">${fmt.pct(c.f, 3)}</td><td class="num">${fmt.big(c.v)}</td></tr>`).join("");
+    $("#ls").querySelectorAll("[data-s]").forEach((tr) => (tr.onclick = () => { sym = tr.dataset.s; drawHeat(); drawLs(); }));
+    $("#src").textContent = G.dataMode === "live"
+      ? T(`Kaynak: OKX public API · ${G.updatedAt.toLocaleTimeString(G.locale)} · soluk L/S değerleri tahminidir`, `Source: OKX public API · ${G.updatedAt.toLocaleTimeString(G.locale)} · faded L/S values are estimates`)
+      : T("Kaynak: örnek veri (OKX'e ulaşılamadı)", "Source: sample data (OKX unreachable)");
+  };
+  $("#sort").querySelectorAll("[data-s]").forEach((b) => (b.onclick = () => { sort = b.dataset.s; $("#sort").querySelectorAll("[data-s]").forEach((x) => x.setAttribute("aria-pressed", x === b)); drawLs(); }));
+  addEventListener("resize", () => G.heatmap($("#heat"), sym));
+  document.addEventListener("glance:data", drawLs);
+  G.ready.then(() => { drawHeat(); drawLs(); });
+})();
+</script>
+</body>
+</html>

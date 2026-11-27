@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="t">
+  <title id="t">GLANCE</title>
+  <rect width="64" height="64" rx="16" fill="#131b2b"/>
+  <path d="M8 33 C 18 17, 46 17, 56 33 C 46 49, 18 49, 8 33 Z" fill="none" stroke="#f4ecdf" stroke-width="4" stroke-linejoin="round"/>
+  <circle cx="32" cy="33" r="9.5" fill="#f2a93b"/>
+  <path d="M25 37 L30 32 L34 35 L40 28" fill="none" stroke="#131b2b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

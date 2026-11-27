@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-tr="Karar kaydı · GLANCE">Decision log · GLANCE</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/glance.css">
+</head>
+<body data-page="kayit">
+<main id="main" tabindex="-1">
+  <div class="page-head">
+    <div><h1 data-tr="Karar kaydı">Decision log</h1><p class="muted" data-tr="Ajanın her kararı ve nedeni. Her kayıt bir öncekinin özetini taşır; biri değişirse zincir bozulur.">Every agent decision and its reason. Each entry carries the hash of the previous one; change any entry and the chain breaks.</p></div>
+    <div class="actions"><button class="btn btn-primary" id="verify" data-tr="Zinciri doğrula">Verify chain</button><button class="btn btn-ghost btn-sm" id="tamper" data-tr="Kaydı boz (demo)" title="Demo: edit an entry and watch verification catch it" data-tr-title="Demo: bir kaydı değiştirip doğrulamanın yakalamasını gör">Tamper (demo)</button><button class="btn btn-ghost btn-sm" id="reset" data-tr="Sıfırla">Reset</button></div>
+  </div>
+  <div class="grid">
+    <div class="notice" id="vres" hidden></div>
+    <div class="segment" id="flt"><button type="button" data-f="all" aria-pressed="true" data-tr="Tümü">All</button><button type="button" data-f="asistan" aria-pressed="false" data-tr="Asistan">Assistant</button><button type="button" data-f="algo" aria-pressed="false">Algo</button><button type="button" data-f="no" aria-pressed="false" data-tr="Reddedilen">Rejected</button></div>
+    <div class="chain" id="chain"></div>
+  </div>
+</main>
+<script src="js/common.js"></script>
+<script src="js/log.js"></script>
+<script>
+(function () {
+  const { T, tx, esc } = G, $ = (s) => document.querySelector(s);
+  let f = "all";
+  const KIND = { ok: ["badge-ok", T("Gönderildi", "Executed")], no: ["badge-bad", T("Reddedildi", "Rejected")], info: ["badge-muted", T("Bilgi", "Info")] };
+  const draw = () => {
+    const all = G.log.all().slice().reverse().filter((e) => f === "all" || e.mode === f || (f === "no" && e.kind === "no"));
+    $("#chain").innerHTML = all.map((e) => `<details class="dec"><summary><span class="badge ${KIND[e.kind][0]}">${KIND[e.kind][1]}</span><span class="t"><b>${esc(tx(e.title))}</b><small>#${e.id} · ${new Date(e.t).toLocaleString(G.locale, { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })} · ${e.mode === "algo" ? "Algo" : T("Asistan", "Assistant")}</small></span><span class="faint">${T("Neden?", "Why?")}</span></summary>
+      <div class="body"><p style="margin:0">${esc(tx(e.why))}</p><ul class="chk">${(e.checks || []).map((c) => { const s = tx(c); return `<li class="${s.startsWith("✕") ? "x" : ""}">${esc(s.replace(/^✕\s*/, ""))}</li>`; }).join("")}</ul>
+      <div class="hash">${T("önceki", "prev")}: ${e.prev.slice(0, 16)}…<br>${T("bu kayıt", "this entry")}: ${e.hash}</div></div></details>`).join("") || `<p class="empty">${T("Kayıt yok.", "No entries.")}</p>`;
+  };
+  $("#flt").querySelectorAll("[data-f]").forEach((b) => (b.onclick = () => { f = b.dataset.f; $("#flt").querySelectorAll("[data-f]").forEach((x) => x.setAttribute("aria-pressed", x === b)); draw(); }));
+  $("#verify").onclick = () => {
+    const r = G.log.verify(), box = $("#vres"); box.hidden = false;
+    box.className = "notice " + (r.ok ? "notice-info" : "notice-warn");
+    box.innerHTML = "<div>" + (r.ok
+      ? `<span class="verify-ok">✓ ${T("Zincir sağlam.", "Chain intact.")}</span> ${T(`${r.n} kayıt doğrulandı. Son özet:`, `${r.n} entries verified. Head hash:`)} <span class="mono">${r.head.slice(0, 12)}…</span> ${T("Bu özet istenirse Avalanche C-Chain'e yazılır.", "This hash can optionally be anchored on Avalanche C-Chain.")}`
+      : `<b class="down">✕ ${T("Zincir bozuk.", "Chain broken.")}</b> ${T(`#${r.at} numaralı kayıt sonradan değiştirilmiş. Gerçek sistemde ajan bu durumda kendini durdurur.`, `Entry #${r.at} was modified after the fact. In the real system the agent halts itself here.`)}`) + "</div>";
+  };
+  $("#tamper").onclick = () => { G.log.tamper(); draw(); G.toast(T("Bir kayıt değiştirildi. Şimdi zinciri doğrula.", "An entry was modified. Now verify the chain.")); };
+  $("#reset").onclick = () => { G.log.reset(); $("#vres").hidden = true; draw(); };
+  draw();
+})();
+</script>
+</body>
+</html>

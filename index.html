@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-tr="GLANCE · Yapay zekâ destekli trade ajanı">GLANCE · AI-assisted trading agent</title>
+  <meta name="description" content="GLANCE: an assistant that plans trades from market data, and algo trading driven by a risk profile. The model suggests, the code decides.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/glance.css">
+</head>
+<body data-page="home">
+<main id="main" tabindex="-1">
+  <section class="hero">
+    <div class="hero-inner">
+      <img class="hero-logo" src="img/logo.svg" alt="GLANCE logo" width="112" height="112">
+      <h1>GLANCE</h1>
+      <p class="motto" data-tr="Model önerir, kod karar verir. Her işlemde stop var, her kararın kaydı var.">The model suggests, the code decides. Every trade has a stop, every decision has a record.</p>
+      <div class="mode-pick">
+        <a class="mode-card" href="asistan.html">
+          <span class="mc-ico"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></span>
+          <h2 data-tr="Asistan">Assistant</h2>
+          <p data-tr="Yarı otomatik. Ajan veriye bakıp plan önerir, emir senin onayınla gider.">Semi-automatic. The agent reads the market and proposes a plan; orders go out only after you approve.</p>
+          <ul>
+            <li data-tr="Long/short, likidasyon, funding okur">Reads long/short, liquidations, funding</li>
+            <li data-tr="Giriş, stop, hedef ve büyüklük hesaplar">Computes entry, stop, target and size</li>
+            <li data-tr="Onayla, düzenle ya da iptal et">Approve, adjust or cancel</li>
+          </ul>
+          <span class="go" data-tr="Asistanı aç →">Open assistant →</span>
+        </a>
+        <a class="mode-card algo" href="algo.html">
+          <span class="mc-ico"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l5-5 4 3 8-8"/><path d="M15 7h5v5"/></svg></span>
+          <h2 data-tr="Algo trade">Algo trading</h2>
+          <p data-tr="Tam otomatik. Bir risk profili seç ya da kendi planını kur, Başlat'a bas.">Fully automatic. Pick a risk profile or build your own plan, then press Start.</p>
+          <ul>
+            <li data-tr="Yüksek · Orta · Düşük risk · Manuel">High · Medium · Low risk · Manual</li>
+            <li data-tr="Parite, vade ve R:R profile göre">Pairs, horizon and R:R follow the profile</li>
+            <li data-tr="Her karar zincirli kayda yazılır">Every decision goes to a hash-chained log</li>
+          </ul>
+          <span class="go" data-tr="Algo terminali →">Algo terminal →</span>
+        </a>
+      </div>
+      <div class="trust">
+        <span data-tr="🛡 Stop zorunlu">🛡 Stop required</span>
+        <span data-tr="🔑 Çekim izni olmayan API anahtarı">🔑 Withdrawal-disabled API keys</span>
+        <span data-tr="📒 Hash zincirli karar kaydı">📒 Hash-chained decision log</span>
+        <span data-tr="🧪 Varsayılan paper trade">🧪 Paper trading by default</span>
+      </div>
+      <nav class="hero-links" aria-label="More">
+        <a href="piyasa.html" data-tr="Piyasa verisi">Market data</a>
+        <a href="kayit.html" data-tr="Karar kaydı">Decision log</a>
+      </nav>
+    </div>
+  </section>
+</main>
+<script src="js/common.js"></script>
+</body>
+</html>
